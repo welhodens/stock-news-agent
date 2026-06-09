@@ -1,0 +1,55 @@
+# ╔══════════════════════════════════════════════════════════════════╗
+# ║  GitHub Actions — Osake-uutisagentti                            ║
+# ║  Tallenna: .github/workflows/news-agent.yml                     ║
+# ╚══════════════════════════════════════════════════════════════════╝
+#
+# SECRETS (repo → Settings → Secrets → Actions → New repository secret):
+#   ANTHROPIC_API_KEY
+#   TELEGRAM_TOKEN
+#   TELEGRAM_CHAT_ID
+
+name: Osake-uutisagentti (APLD·TSLA·AMD·ENVX)
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'   # Joka 15 minuutti
+  workflow_dispatch:           # Manuaalinen käynnistys
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Palauta tila (muistetaan nähdyt uutiset)
+        uses: actions/cache@v4
+        with:
+          path: news_agent_state.json
+          key: news-state-${{ github.run_id }}
+          restore-keys: |
+            news-state-
+
+      - name: 🐍 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Riippuvuudet
+        run: pip install --quiet requests beautifulsoup4 anthropic lxml
+
+      - name: 🤖 Aja agentti
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python news_agent.py
+
+      - name: 💾 Tallenna tila
+        if: always()
+        uses: actions/cache@v4
+        with:
+          path: news_agent_state.json
+          key: news-state-${{ github.run_id }}
