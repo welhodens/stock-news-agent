@@ -1,0 +1,40 @@
+╔══════════════════════════════════════════════════════════════════╗
+ ║  GitHub Actions — Viikkokooste                                  ║
+ ║  Tallenna: .github/workflows/weekly-report.yml                  ║
+ ╚══════════════════════════════════════════════════════════════════╝
+
+ SECRETS (samat kuin uutisagentissa — jo lisätty):
+   ANTHROPIC_API_KEY
+   TELEGRAM_TOKEN
+   TELEGRAM_CHAT_ID
+ 
+name: Viikkokooste (Perjantai 23:30)
+ 
+on:
+  schedule:
+    - cron: '30 20 * * 5'   # Perjantai 20:30 UTC = 23:30 Suomi (kesäaika)
+  workflow_dispatch:          # Manuaalinen testaus
+ 
+jobs:
+  weekly-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+ 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+ 
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+ 
+      - name: Riippuvuudet
+        run: pip install --quiet requests anthropic
+ 
+      - name: Aja viikkokooste
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python weekly_report.py
