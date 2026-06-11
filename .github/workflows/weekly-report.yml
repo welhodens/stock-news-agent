@@ -1,7 +1,4 @@
-╔══════════════════════════════════════════════════════════════════╗
- ║  GitHub Actions — Viikkokooste                                  ║
- ║  Tallenna: .github/workflows/weekly-report.yml                  ║
- ╚══════════════════════════════════════════════════════════════════╝
+
 
  SECRETS (samat kuin uutisagentissa — jo lisätty):
    ANTHROPIC_API_KEY
