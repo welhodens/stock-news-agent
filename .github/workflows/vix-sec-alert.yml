@@ -1,6 +1,4 @@
-══════════════════════════════════════════════════════════════
- TIEDOSTO 4: .github/workflows/vix-sec-alert.yml
- ══════════════════════════════════════════════════════════════
+
  name: VIX + SEC hälytys (joka 15 min)
  on:
    schedule:
