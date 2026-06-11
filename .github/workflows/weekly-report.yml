@@ -1,10 +1,6 @@
 
 
- SECRETS (samat kuin uutisagentissa — jo lisätty):
-   ANTHROPIC_API_KEY
-   TELEGRAM_TOKEN
-   TELEGRAM_CHAT_ID
- 
+
 name: Viikkokooste (Perjantai 23:30)
  
 on:
