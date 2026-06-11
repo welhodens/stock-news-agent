@@ -1,0 +1,47 @@
+ Tallenna: .github/workflows/geopolitical-alert.yml
+ 
+name: Geopoliittinen hälytys (joka 15 min)
+ 
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+ 
+jobs:
+  alert:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+ 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+ 
+      - name: Palauta tila
+        uses: actions/cache@v4
+        with:
+          path: geopolitical_state.json
+          key: geo-state-${{ github.run_id }}
+          restore-keys: |
+            geo-state-
+ 
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+ 
+      - name: Riippuvuudet
+        run: pip install --quiet requests anthropic beautifulsoup4 lxml
+ 
+      - name: Aja geopoliittinen hälytys
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python geopolitical_alert.py
+ 
+      - name: Tallenna tila
+        if: always()
+        uses: actions/cache@v4
+        with:
+          path: geopolitical_state.json
+          key: geo-state-${{ github.run_id }}
