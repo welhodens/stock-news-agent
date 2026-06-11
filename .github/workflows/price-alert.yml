@@ -1,6 +1,4 @@
-══════════════════════════════════════════════════════════════
- TIEDOSTO 3: .github/workflows/price-alert.yml
- ══════════════════════════════════════════════════════════════
+
  name: Kurssi-hälytys (joka 15 min)
  on:
    schedule:
