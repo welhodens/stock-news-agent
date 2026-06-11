@@ -1,6 +1,4 @@
-══════════════════════════════════════════════════════════════
- TIEDOSTO 1: .github/workflows/morning-brief.yml
- ══════════════════════════════════════════════════════════════
+
  name: Aamubrief (klo 08:00 Suomi)
  on:
    schedule:
