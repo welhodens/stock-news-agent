@@ -1,6 +1,4 @@
-══════════════════════════════════════════════════════════════
- TIEDOSTO 2: .github/workflows/evening-report.yml
- ══════════════════════════════════════════════════════════════
+
  name: Iltakooste (klo 23:00 Suomi)
  on:
    schedule:
