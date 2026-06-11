@@ -1,0 +1,36 @@
+══════════════════════════════════════════════════════════════
+ TIEDOSTO 3: .github/workflows/price-alert.yml
+ ══════════════════════════════════════════════════════════════
+ name: Kurssi-hälytys (joka 15 min)
+ on:
+   schedule:
+     - cron: '*/15 * * * *'
+   workflow_dispatch:
+ jobs:
+   alert:
+     runs-on: ubuntu-latest
+     timeout-minutes: 5
+     steps:
+       - uses: actions/checkout@v4
+       - name: Palauta tila
+         uses: actions/cache@v4
+         with:
+           path: price_alert_state.json
+           key: price-state-${{ github.run_id }}
+           restore-keys: |
+             price-state-
+       - uses: actions/setup-python@v5
+         with:
+           python-version: '3.11'
+       - run: pip install --quiet requests anthropic
+       - env:
+           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+           TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
+           TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
+         run: python price_alert.py
+       - name: Tallenna tila
+         if: always()
+         uses: actions/cache@v4
+         with:
+           path: price_alert_state.json
+           key: price-state-${{ github.run_id }}
