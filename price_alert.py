@@ -61,7 +61,7 @@ Kirjoita SUOMEKSI 2-3 lausetta: mikä aiheutti liikkeen ja mitä se tarkoittaa s
 
     try:
         msg = client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model="claude-sonnet-4-6",
             max_tokens=400,
             tools=[{"type": "web_search_20250305", "name": "web_search"}],
             messages=[{"role": "user", "content": prompt}]
